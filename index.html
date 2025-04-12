@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f8f9fa;
+    
+      display: flex;
+      flex-direction: column;
+      gap:20px;
+   
+   
+    
+    }
+    .maincontainer{
+  width:50%;
+  margin: auto;
+   display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-content: center;
+    justify-content: center;
+    }
+
+    input, button {
+      margin: 8px;
+      padding: 8px;
+      font-size: 16px;
+     border: 1px solid #e1e1e2;
+
+    }
+
+    .studentCard {
+      margin-top: 15px;
+      padding: 15px;
+      border: 1px solid #e1e1e2;
+      border-radius: 8px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 170px;
+       box-shadow: 0 0 5px #e1e1e2
+    }
+
+    .display {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .studentCard > button {
+      background-color: white;
+      border: 1px solid red;
+      color: red;
+      width: 70px;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+   .color{
+        background-color: green;
+        color: white;
+        padding: 3px 6px 3px 6px;
+        font-weight: bold;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+    .div{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #search{
+        height: 30px;
+        width: 50%;
+        border-radius: 5px;
+    }
+    form{
+        background-color: white;
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+         border: 1px solid #e1e1e2;
+         border-radius: 5px;
+    }
+
+
+#age,#class,#marks{
+    width: 70px;
+   
+}
+.btn{
+    background-color: #137f4d;
+    color: white;
+    border-radius: 8px;
+    font-weight: 400;
+    padding: 8px 25px 8px 25px;
+}
+.div2{
+    display: flex;
+    flex-direction: column;
+}
+.btn2{
+    float: right;
+}
+
+button{
+    color: white;
+    border-radius: 5px;
+}
+
+.show{
+    background-color: #0d6efd;
+}
+.btn1{
+    background-color: #6c757d;
+}
+.btn2{
+    background-color: #0dcaf0;
+}
+h1{
+    text-align: center;
+}
+  </style>
+</head>
+<body>
+<div class="maincontainer">
+  <h1 >Student Manager</h1>
+  <form onsubmit="addstnd(event)">
+    <input type="text" id="name" placeholder="Name" />
+    <input type="number" id="age" placeholder="Age" />
+    <input type="text" id="class" placeholder="Class" />
+    <input type="number" id="marks" placeholder="Marks" />
+    <button type="submit" class="btn">Add Student</button>
+  </form>
+
+  <div class="div">
+    <input type="search" placeholder="🔍 Search by name..." id="search"/>
+    <div class="div2">
+        <div>
+      <button onclick="show()"  class="show">Show >75</button>
+      <button class="btn1">Sort by Marks</button>
+      
+      <div class="btndiv">
+        <button class="btn2">Average Marks</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="display"></div>
+  </div>
+
+  <script>
+    const students = [];
+    const displayDiv = document.querySelector(".display");
+
+    function addstnd(e) {
+      e.preventDefault();
+
+      let studentName = document.querySelector("#name").value.trim();
+      let studentAge = document.querySelector("#age").value.trim();
+      let studentClass = document.querySelector("#class").value.trim();
+      let studentMarks = document.querySelector("#marks").value.trim();
+
+      if (studentName && studentAge && studentClass && studentMarks) {
+        const student = {
+          studentName,
+          studentAge,
+          studentClass,
+          studentMarks: parseInt(studentMarks),
+        };
+
+        students.push(student);
+        display(students);
+        document.querySelector("form").reset();
+      }
+    }
+
+    function display(data) {
+      displayDiv.innerHTML = ""; // Clear previous cards
+      data.forEach((student, index) => {
+        let card = document.createElement("div");
+        card.className = "studentCard";
+        card.innerHTML = `
+          <h3>${student.studentName}</h3>
+          <p>Age: ${student.studentAge}</p>
+          <p>Class: ${student.studentClass}</p>
+          <p>Marks: <span class="color">${student.studentMarks} </span></p>
+          <button onclick="remove(${index})">Remove</button>
+        `;
+        displayDiv.appendChild(card);
+      });
+    }
+
+    function remove(index) {
+      students.splice(index, 1);
+      display(students);
+    }
+
+    document.querySelector(".btn1").addEventListener("click", () => {
+
+      const sorted = students.sort((a, b) => b.studentMarks - a.studentMarks);
+    display(sorted);
+    });
+  function show() {
+      const filtered = students.filter(s => s.studentMarks > 75);
+      display(filtered);
+    }
+    document.querySelector(".show").addEventListener("click", () => {
+      const filtered = students.filter(s => s.studentMarks > 75);
+      display(filtered);
+    });
+ 
+    document.querySelector(".btn2").addEventListener("click", () => {
+      const average = students.reduce((sum, student) => sum + student.studentMarks, 0) / students.length;
+      alert(`Average Marks: ${average}`);
+    });
+    document.querySelector("#search").addEventListener("input", (e) => {
+      const searchname= e.target.value.toLowerCase();
+      const filteredStudents = students.filter(student => student.studentName.toLowerCase().includes(searchname));
+      display(filteredStudents);
+    });
+
+ 
+
+  </script>
+</body>
+</html>
