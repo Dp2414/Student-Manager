@@ -64,7 +64,7 @@
       font-weight: 500;
   }
 
-  .color {
+ span {
       background-color: green;
       color: white;
       padding: 3px 6px 3px 6px;

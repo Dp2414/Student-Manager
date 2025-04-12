@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Document</title>
-  <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="maincontainer">
+      <h1>Student Manager</h1>
+      <form onsubmit="addstnd(event)">
+        <input type="text" id="name" placeholder="Name" />
+        <input type="number" id="age" placeholder="Age" />
+        <input type="text" id="class" placeholder="Class" />
+        <input type="number" id="marks" placeholder="Marks" />
+        <button type="submit" class="btn">Add Student</button>
+      </form>
 
-</head>
-<body>
-<div class="maincontainer">
-  <h1 >Student Manager</h1>
-  <form onsubmit="addstnd(event)">
-    <input type="text" id="name" placeholder="Name" />
-    <input type="number" id="age" placeholder="Age" />
-    <input type="text" id="class" placeholder="Class" />
-    <input type="number" id="marks" placeholder="Marks" />
-    <button type="submit" class="btn">Add Student</button>
-  </form>
+      <div class="div">
+        <input type="search" placeholder="🔍 Search by name..." id="search" />
+        <div class="div2">
+          <div>
+            <button onclick="show()" class="show">Show >75</button>
+            <button class="btn1">Sort by Marks</button>
 
-  <div class="div">
-    <input type="search" placeholder="🔍 Search by name..." id="search"/>
-    <div class="div2">
-        <div>
-      <button onclick="show()"  class="show">Show >75</button>
-      <button class="btn1">Sort by Marks</button>
-      
-      <div class="btndiv">
-        <button class="btn2">Average Marks</button>
+            <div class="btndiv">
+              <button class="btn2">Average Marks</button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div class="display"></div>
     </div>
-  </div>
-  </div>
 
-  <div class="display"></div>
-  </div>
-
-<script src="script.js">
+    <script src="script.js"></script>
+      
    
-
-</script>
-</body>
+  </body>
 </html>
