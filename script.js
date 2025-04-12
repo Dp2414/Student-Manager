@@ -1,71 +1,81 @@
-    const students = [];
-    const displayDiv = document.querySelector(".display");
+const studentList = [];
+const displayContainer = document.querySelector(".display");
 
-    function addstnd(e) {
-      e.preventDefault();
+function handleAddStudent(event) {
+  event.preventDefault();
 
-      let studentName = document.querySelector("#name").value.trim();
-      let studentAge = document.querySelector("#age").value.trim();
-      let studentClass = document.querySelector("#class").value.trim();
-      let studentMarks = document.querySelector("#marks").value.trim();
+  const nameInput = document.querySelector("#name").value.trim();
+  const ageInput = document.querySelector("#age").value.trim();
+  const classInput = document.querySelector("#class").value.trim();
+  const marksInput = document.querySelector("#marks").value.trim();
 
-      if (studentName && studentAge && studentClass && studentMarks) {
-        const student = {
-          studentName,
-          studentAge,
-          studentClass,
-          studentMarks: parseInt(studentMarks),
-        };
+  if (nameInput && ageInput && classInput && marksInput) {
+    const newStudent = {
+      name: nameInput,
+      age: ageInput,
+      className: classInput,
+      marks: parseInt(marksInput),
+    };
 
-        students.push(student);
-        display(students);
-        document.querySelector("form").reset();
-      }
-    }
+    studentList.push(newStudent);
+    renderStudents(studentList);
+    document.querySelector("form").reset();
+  }
+}
 
-    function display(data) {
-      displayDiv.innerHTML = ""; // Clear previous cards
-      data.forEach((student, index) => {
-        let card = document.createElement("div");
-        card.className = "studentCard";
-        card.innerHTML = `
-          <h3>${student.studentName}</h3>
-          <p>Age: ${student.studentAge}</p>
-          <p>Class: ${student.studentClass}</p>
-          <p>Marks: <span class="color">${student.studentMarks} </span></p>
-          <button onclick="remove(${index})">Remove</button>
-        `;
-        displayDiv.appendChild(card);
-      });
-    }
+function renderStudents(studentsToRender) {
+  displayContainer.innerHTML = "";
+  studentsToRender.forEach((student, idx) => {
+    const studentCard = document.createElement("div");
+    studentCard.classList.add("studentCard");
 
-    function remove(index) {
-      students.splice(index, 1);
-      display(students);
-    }
+    studentCard.innerHTML = `
+      <h3>${student.name}</h3>
+      <p>Age: ${student.age}</p>
+      <p>Class: ${student.className}</p>
+      <p>Marks: <span class="color">${student.marks}</span></p>
+      <button onclick="deleteStudent(${idx})">Remove</button>
+    `;
 
-    document.querySelector(".btn1").addEventListener("click", () => {
+    displayContainer.appendChild(studentCard);
+  });
+}
 
-      const sorted = students.sort((a, b) => b.studentMarks - a.studentMarks);
-    display(sorted);
-    });
-  function show() {
-      const filtered = students.filter(s => s.studentMarks > 75);
-      display(filtered);
-    }
-    document.querySelector(".show").addEventListener("click", () => {
-      const filtered = students.filter(s => s.studentMarks > 75);
-      display(filtered);
-    });
- 
-    document.querySelector(".btn2").addEventListener("click", () => {
-      const average = students.reduce((sum, student) => sum + student.studentMarks, 0) / students.length;
-      alert(`Average Marks: ${average}`);
-    });
-    document.querySelector("#search").addEventListener("input", (e) => {
-      const searchname= e.target.value.toLowerCase();
-      const filteredStudents = students.filter(student => student.studentName.toLowerCase().includes(searchname));
-      display(filteredStudents);
-    });
+function deleteStudent(index) {
+  studentList.splice(index, 1);
+  renderStudents(studentList);
+}
 
- 
+document.querySelector(".btn1").addEventListener("click", () => {
+  const sortedList = [...studentList].sort((a, b) => b.marks - a.marks);
+  renderStudents(sortedList);
+});
+
+document.querySelector(".show").addEventListener("click", () => {
+  const highScorers = studentList.filter((student) => student.marks > 75);
+  renderStudents(highScorers);
+});
+
+document.querySelector(".btn2").addEventListener("click", () => {
+  if (studentList.length === 0) {
+    alert("No students to calculate average.");
+    return;
+  }
+
+  const totalMarks = studentList.reduce(
+    (acc, student) => acc + student.marks,
+    0
+  );
+  const averageMarks = totalMarks / studentList.length;
+  alert(`Average Marks: ${averageMarks.toFixed(2)}`);
+});
+
+document.querySelector("#search").addEventListener("input", (event) => {
+  const keyword = event.target.value.toLowerCase();
+  const matchedStudents = studentList.filter((student) =>
+    student.name.toLowerCase().includes(keyword)
+  );
+  renderStudents(matchedStudents);
+});
+
+document.querySelector("form").addEventListener("submit", handleAddStudent);
